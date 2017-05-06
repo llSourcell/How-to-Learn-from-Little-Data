@@ -10,7 +10,7 @@ from .Utils.tf_utils import update_tensor
 def memory_augmented_neural_network(input_var, target_var, \
                                     batch_size=16, nb_class=5, memory_shape=(128, 40), \
                                     controller_size=200, input_size=20 * 20, nb_reads=4):
-    ## input_var has dimensions (batch_size, time, 	input_dim)
+    ## input_var has dimensions (batch_size, time, input_dim)
     ## target_var has dimensions (batch_size, time) (label indices)
 
     M_0 = shared_float32(1e-6 * np.ones((batch_size,) + memory_shape), name='memory')
@@ -21,15 +21,15 @@ def memory_augmented_neural_network(input_var, target_var, \
     wu_0 = shared_one_hot((batch_size, memory_shape[0]), name='wu')
     
     def shape_high(shape):
-    	shape = np.array(shape)
-    	if isinstance(shape, int):
+        shape = np.array(shape)
+        if isinstance(shape, int):
             high = np.sqrt(6. / shape)
-    	else:
+        else:
             high = np.sqrt(6. / (np.sum(shape[:2]) * np.prod(shape[2:])))
         return (shape,high)
 
     with tf.variable_scope("Weights"):
-    	shape, high = shape_high((nb_reads, controller_size, memory_shape[1]))
+        shape, high = shape_high((nb_reads, controller_size, memory_shape[1]))
         W_key = tf.get_variable('W_key', shape=shape,initializer=tf.random_uniform_initializer(-1*high, high))
         b_key = tf.get_variable('b_key', shape=(nb_reads, memory_shape[1]),initializer=tf.constant_initializer(0))
         shape, high = shape_high((nb_reads, controller_size, memory_shape[1]))
