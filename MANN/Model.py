@@ -82,7 +82,7 @@ def memory_augmented_neural_network(input_var, target_var, \
         gf = tf.sigmoid(gf_)
         gi = tf.sigmoid(gi_)
         go = tf.sigmoid(go_)
-        u = tf.sigmoid(u_)
+        u = tf.tanh(u_)
 
         c_t = gf*c_tm1 + gi*u
         h_t = go * tf.tanh(c_t)  #(batch_size, controller_size)
